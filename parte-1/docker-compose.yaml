@@ -4,7 +4,7 @@ services:
   php_fpm:
     build: .
     container_name: php_fpm
-    entrypoint: dockerize -template ./.docker/app/.env:.env  -wait tcp://db:3306 -timeout 40s .docker/entrypoint.sh
+    entrypoint: dockerize -template docker/app/.env:.env  -wait tcp://db:3306 -timeout 40s docker/entrypoint.sh
     environment:
       - DB_HOST=db
       - DB_DATABASE=laravel
@@ -18,11 +18,11 @@ services:
       - db
       - redis
   nginx:
-    build: .docker/nginx
+    build: docker/nginx
     container_name: nginx
     restart: always
     tty: true
-    entrypoint: dockerize -template .docker/app/nginx.conf:.docker/nginx/nginx.conf nginx -g 'daemon off;'
+    entrypoint: dockerize -template docker/app/nginx.conf:docker/nginx/nginx.conf nginx -g 'daemon off;'
     environment:
       - APP_PHP=php_fpm
       - APP_PHP_PORT=9000
